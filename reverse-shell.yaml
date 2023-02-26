@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: attacker
+  name: shell-pod
   labels:
-    app: attacker
+    app: shell
 spec:
   containers:
-  - name: attacker
+  - name: shell
     image: danielma911/ncat:v1
     volumeMounts:
     - mountPath: /host
