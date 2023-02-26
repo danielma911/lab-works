@@ -3,10 +3,10 @@ kind: Pod
 metadata:
   name: attacker
   labels:
-    app: shell
+    app: attacker
 spec:
   containers:
-  - name: shell
+  - name: attacker
     image: danielma911/ncat:v1
     volumeMounts:
     - mountPath: /host
