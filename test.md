@@ -305,8 +305,6 @@ In this section, we will simulate a reverse shell attack.  In this scenario, the
       .output_box {
         background: #2B2B2B;
         color: white;
-        margin: 0px;
-        padding: 2px;
         font-family: monospace;
         border-radius: 3px;
       }
@@ -331,7 +329,7 @@ In this section, we will simulate a reverse shell attack.  In this scenario, the
     ```
     kubectl get service front-end -n sock-shop
     ```
-    
+
     <html><body><pre><div class="output_box">
         NAME        TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
         front-end   LoadBalancer   10.30.158.128   34.134.135.226   80:30001/TCP   8m21s
