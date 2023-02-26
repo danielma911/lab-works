@@ -331,6 +331,8 @@ In this section, we will simulate a reverse shell attack.  In this scenario, the
     ```
 
     <html><body><pre><div class="output_box">
+        <b>(output)</b>
+        </br>
         NAME        TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
         front-end   LoadBalancer   10.30.158.128   34.134.135.226   80:30001/TCP   8m21s
     </div></pre></body></html>
