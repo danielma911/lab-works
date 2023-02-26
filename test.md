@@ -153,15 +153,18 @@ Here we will deploy a sample web application to our GKE cluster.
     ```
     kubectl get service front-end -n sock-shop
     ```
+    <html>
+    <body>
+        <pre>
+        <div class="output_box">
+        NAME        TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+        front-end   LoadBalancer   10.30.158.128   34.134.135.226   80:30001/TCP   8m21s
+        </div>
+        </pre>
+    </body>
+    </html>
 
 
-    ---
-    (output)
-    
-    ```
-
-    ```
-    ---
 
 4. Copy the `EXTERNAL-IP` and paste it into a new browser tab.  The following page should appear. 
 
@@ -298,13 +301,14 @@ In this section, we will simulate a reverse shell attack.  In this scenario, the
         border-radius: 3px;
       }
     </style>
-    <title>Output</title>
     <style>
       .output_box {
         background: #2B2B2B;
         color: white;
-        padding: 5px;
+        margin: 0px;
+        padding: 2px;
         font-family: monospace;
+        border-radius: 3px;
       }
     </style>
   </head>
@@ -319,28 +323,19 @@ In this section, we will simulate a reverse shell attack.  In this scenario, the
   </body>
 </html>
 
-<html>
-<body>
-    <pre class="output_box">
-        <code>
-            NAME        TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
-            front-end   LoadBalancer   10.30.158.128   34.134.135.226   80:30001/TCP   8m21s
-        </code>
-    </pre>
-</body>
-</html>
 
-<html>
-  <body>
-    <div class="output_box">
-    <pre>
-            NAME        TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
-            front-end   LoadBalancer   10.30.158.128   34.134.135.226   80:30001/TCP   8m21s
-    </pre>
-    </div>
-  </body>
-</html>
 
+
+1. Retrieve the service's external IP of the sample application.
+   
+    ```
+    kubectl get service front-end -n sock-shop
+    ```
+    
+    <html><body><pre><div class="output_box">
+        NAME        TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+        front-end   LoadBalancer   10.30.158.128   34.134.135.226   80:30001/TCP   8m21s
+    </div></pre></body></html>
 
 </br>
 </br>
