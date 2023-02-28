@@ -1,10 +1,16 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: log4shell
+---
+apiVersion: v1
 kind: Pod
 metadata:
   creationTimestamp: null
   labels:
     run: att-machine
   name: att-machine
+  namespace: log4shell
 spec:
   containers:
   - command:
@@ -21,6 +27,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: att-svr
+  namespace: log4shell
 spec:
   selector:
     run: att-svr
@@ -39,7 +46,7 @@ metadata:
   labels:
     run: att-svr
   name: att-svr
-  namespace: default
+  namespace: log4shell
 spec:
   containers:
   - image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/l4s-demo-svr:1.0
@@ -60,28 +67,11 @@ metadata:
   labels:
     run: vul-app1
   name: vul-app1
+  namespace: log4shell
 spec:
   containers:
   - image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/l4s-demo-app:1.0
     name: vul-app1
-    ports:
-    - containerPort: 8080
-    resources: {}
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always
-status: {}
----
-apiVersion: v1
-kind: Pod
-metadata:
-  creationTimestamp: null
-  labels:
-    run: vul-app2
-  name: vul-app2
-spec:
-  containers:
-  - image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/l4s-demo-app:1.0
-    name: vul-app2
     ports:
     - containerPort: 8080
     resources: {}
