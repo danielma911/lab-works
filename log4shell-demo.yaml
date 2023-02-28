@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: att-machine
+  name: att-machine
+spec:
+  containers:
+  - command:
+    - sleep
+    - 1d
+    image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/att-machine:1.0
+    name: att-machine
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: att-svr
+spec:
+  selector:
+    run: att-svr
+  clusterIP: None
+  ports:
+  - name: ldap
+    port: 1389
+    targetPort: 1389
+  - name: web
+    port: 8888
+    targetPort: 8888
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: att-svr
+  name: att-svr
+  namespace: default
+spec:
+  containers:
+  - image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/l4s-demo-svr:1.0
+    imagePullPolicy: IfNotPresent
+    name: att-svr
+    ports:
+    - containerPort: 8888
+      protocol: TCP
+      name: web
+    - containerPort: 1389
+      protocol: TCP
+      name: ldap
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: vul-app1
+  name: vul-app1
+spec:
+  containers:
+  - image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/l4s-demo-app:1.0
+    name: vul-app1
+    ports:
+    - containerPort: 8080
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: vul-app2
+  name: vul-app2
+spec:
+  containers:
+  - image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/l4s-demo-app:1.0
+    name: vul-app2
+    ports:
+    - containerPort: 8080
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
