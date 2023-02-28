@@ -78,3 +78,22 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: vul-app2
+  name: vul-app2
+  namespace: log4shell
+spec:
+  containers:
+  - image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/l4s-demo-app:1.0
+    name: vul-app2
+    ports:
+    - containerPort: 8080
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
