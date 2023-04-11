@@ -1,31 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata:
+metadata:  
   name: jenkins
-spec:
+spec:  
   replicas: 1
-  selector:
+  selector:    
     matchLabels:
       app: jenkins
+  strategy: {}
   template:
     metadata:
       labels:
         app: jenkins
     spec:
       containers:
-      - name: jenkins
-        image: jenkins/jenkins:lts
+      - image: jenkins/jenkins:lts
+        name: jenkins
         ports:
-          - name: http-port
-            containerPort: 8080
-          - name: jnlp-port
-            containerPort: 50000
+        - name: http-port
+          containerPort: 8080
         volumeMounts:
-          - name: jenkins-vol
-            mountPath: /var/jenkins_vol
+        - name: jenkins-volume
+          mountPath: /var/jenkins_volume
+        resources: {}
       volumes:
-        - name: jenkins-vol
-          emptyDir: {}
+      - name: jenkins-volume
+        emptyDir: {}
+status: {}
 
 ---
 
@@ -33,25 +34,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jenkins
+  namespace: jenkins
 spec:
-  type: NodePort
-  ports:
-    - port: 8080
-      targetPort: 8080
-      nodePort: 30000
+  type: LoadBalancer
   selector:
     app: jenkins
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: jenkins-jnlp
-spec:
-  type: ClusterIP
   ports:
-    - port: 50000
-      targetPort: 50000
-  selector:
-    app: jenkins
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
