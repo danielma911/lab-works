@@ -5,7 +5,6 @@ metadata:
   labels:
     run: victim
   name: victim
-  namespace: prod
 spec:
   containers:
   - image: us.gcr.io/panw-gcp-team-testing/qwiklab/pcc-log4shell/l4s-demo-app:1.0
