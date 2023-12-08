@@ -91,6 +91,7 @@ resource "panos_panorama_static_route_ipv4" "route1" {
   virtual_router = panos_virtual_router.main.name
   name           = "rfc-a"
   destination    = "10.0.0.0/8"
+  interface      = panos_panorama_ethernet_interface.eth2.name
   next_hop       = var.trust_subnet_gateway
 }
 
@@ -100,6 +101,7 @@ resource "panos_panorama_static_route_ipv4" "route2" {
   virtual_router = panos_virtual_router.main.name
   name           = "rfc-b"
   destination    = "172.16.0.0/12"
+  interface      = panos_panorama_ethernet_interface.eth2.name
   next_hop       = var.trust_subnet_gateway
 }
 
@@ -109,6 +111,7 @@ resource "panos_panorama_static_route_ipv4" "route3" {
   virtual_router = panos_virtual_router.main.name
   name           = "rfc-c"
   destination    = "192.168.0.0/16"
+  interface      = panos_panorama_ethernet_interface.eth2.name
   next_hop       = var.trust_subnet_gateway
 }
 
@@ -118,7 +121,7 @@ resource "panos_panorama_static_route_ipv4" "route3" {
 # ------------------------------------------------------------------------------------
 
 # mgmt profile to respond to health checks
-resource "panos_panorama_management_profile" "main" {
+resource "panos_panorama_management_profile" "healthcheck" {
   template = panos_panorama_template.main.name
   name     = "health-checks"
   ping     = true
@@ -126,12 +129,22 @@ resource "panos_panorama_management_profile" "main" {
 }
 
 # loopback with mgmt profile assigned
-resource "panos_panorama_loopback_interface" "example" {
+resource "panos_panorama_loopback_interface" "healthcheck" {
   name               = "loopback.1"
   template           = panos_panorama_template.main.name
   comment            = "Loopback for load balancer health checks"
   static_ips         = [var.loopback_ip]
-  management_profile = panos_panorama_management_profile.main.name
+  management_profile = panos_panorama_management_profile.healthcheck.name
+}
+
+# healthcheck zone
+resource "panos_zone" "healthcheck" {
+  name     = "healthcheck"
+  template = panos_panorama_template.main.name
+  mode     = "layer3"
+  interfaces = [
+    panos_panorama_loopback_interface.healthcheck.name
+  ]
 }
 
 # NAT rule to send healthchecks to loopback
@@ -162,7 +175,5 @@ resource "panos_panorama_nat_rule_group" "main" {
   }
 }
 
-
-# ------------- END --------------------- END --------------------- END --------------
-# ------------- END --------------------- END --------------------- END --------------
-# ------------- END --------------------- END --------------------- END --------------
+# ------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------
