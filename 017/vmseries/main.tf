@@ -141,7 +141,7 @@ resource "google_compute_region_backend_service" "intlb" {
   name             = "vmseries-intlb"
   region           = var.region
   health_checks    = [google_compute_region_health_check.vmseries.self_link] #[google_compute_health_check.intlb.self_link]
-  network          = module.vpc_trust.network_id
+  network          = data.google_compute_subnetwork.trust.network
   session_affinity = null
 
 
