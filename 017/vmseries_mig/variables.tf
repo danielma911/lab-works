@@ -25,22 +25,7 @@ variable "panorama_template_stack" {
 
 variable "panorama_vm_auth_key" {
   description = "Enter the Panorama VM Auth Key."
-}
-
-variable "vmseries_image" {
-  description = "The VM-Series image name."
-}
-
-variable "vmseries_machine_type" {
-  description = "The machine type to use for the VM-Series."
-}
-
-variable "vmseries_replica_maximum" {
-  description = "The maximum number of VM-Series to scale up too."
-}
-
-variable "vmseries_replica_minimum" {
-  description = "The minimum number of VM-Series to scale down too."
+  default = "629330422345557"
 }
 
 variable "subnet_name_mgmt" {
@@ -53,6 +38,11 @@ variable "subnet_name_untrust" {
 
 variable "subnet_name_trust" {
   description = "The subnet name for the trust subnet (NIC2)"
+}
+
+variable "vmseries_image" {
+  description = "The name of the VM-Series image to use from the paloaltonetworksgcp-public project"
+  default = "vmseries-flex-bundle2-1023"
 }
 
 variable "vmseries_metrics" {

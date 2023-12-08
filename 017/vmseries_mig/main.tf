@@ -1,7 +1,6 @@
 
 locals {
-  vmseries_machine_type = "e2-standard-4"
-  vmseries_cpu_platform = "Intel Broadwell"
+  vmseries_image = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/${var.vmserie_image}"
 }
 
 # ------------------------------------------------------------------------------------
@@ -52,17 +51,17 @@ resource "google_service_account" "vmseries" {
 }
 
 module "vmseries" {
-  source                = "./modules/autoscale/"
-  name                  = "vmseries"
-  min_cpu_platform      = local.vmseries_cpu_platform
-  machine_type          = local.vmseries_machine_type
-  regional_mig          = true
-  region                = var.region
-  min_vmseries_replicas = var.vmseries_replica_minimum # min firewalls per zone.
-  max_vmseries_replicas = var.vmseries_replica_maximum # max firewalls per zone.
-  image                 = var.vmseries_image
+  source       = "./modules/autoscale/"
+  name         = "vmseries"
+  regional_mig = true
+  region       = var.region
+  #min_cpu_platform      = "Intel Broadwell"
+  machine_type          = "e2-standard-4"
+  min_vmseries_replicas = 1 # min firewalls per zone.
+  max_vmseries_replicas = 1 # max firewalls per zone.
+  image                 = local.vmseries_image
   service_account_email = google_service_account.vmseries.email
-  tags                  = ["vmseries-tutorial"]
+
   network_interfaces = [
     {
       subnetwork       = data.google_compute_subnetwork.untrust.id
