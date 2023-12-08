@@ -2,7 +2,7 @@
 # Create MGMT, UNTRUST, and TRUST networks.  
 # ------------------------------------------------------------------------------------
 
-// mgmt vpc
+# mgmt vpc
 module "vpc_mgmt" {
   source       = "terraform-google-modules/network/google"
   version      = "~> 4.0"
@@ -35,7 +35,7 @@ module "vpc_mgmt" {
   ]
 }
 
-// untrust vpc
+# untrust vpc
 module "vpc_untrust" {
   source       = "terraform-google-modules/network/google"
   version      = "~> 4.0"
@@ -100,7 +100,7 @@ module "vpc_trust" {
   ]
 }
 
-// retrieve trust subnet default gateway
+# retrieve trust subnet default gateway
 data "google_compute_subnetwork" "trust" {
   self_link = module.vpc_trust.subnets_self_links[0]
   region    = var.region
@@ -121,22 +121,6 @@ module "cloud_nat_untrust" {
   network       = module.vpc_untrust.network_id
 }
 
-# ------------------------------------------------------------------------------------
-# Outputs
-# ------------------------------------------------------------------------------------
-
-output "subnet_name_mgmt" {
-  value = module.vpc_mgmt.subnet_name[0]
-}
-
-output "subnet_name_untrust" {
-  value = module.vpc_untrust.subnet_name[0]
-}
-
-output "subnet_name_trust" {
-  value = module.vpc_trust.subnet_name[0]
-}
-
-output "trust_subnet_gateway" {
-  value = data.google_compute_subnetwork.trust.gateway_address
-}
+# ------------- END --------------------- END --------------------- END --------------
+# ------------- END --------------------- END --------------------- END --------------
+# ------------- END --------------------- END --------------------- END --------------

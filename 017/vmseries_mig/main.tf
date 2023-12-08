@@ -58,8 +58,8 @@ module "vmseries" {
   machine_type          = local.vmseries_machine_type
   regional_mig          = true
   region                = var.region
-  min_vmseries_replicas = var.vmseries_replica_minimum // min firewalls per zone.
-  max_vmseries_replicas = var.vmseries_replica_maximum // max firewalls per zone.
+  min_vmseries_replicas = var.vmseries_replica_minimum # min firewalls per zone.
+  max_vmseries_replicas = var.vmseries_replica_maximum # max firewalls per zone.
   image                 = var.vmseries_image
   service_account_email = google_service_account.vmseries.email
   tags                  = ["vmseries-tutorial"]
@@ -89,7 +89,7 @@ module "vmseries" {
     dhcp-send-client-id         = "yes"
     dhcp-accept-server-hostname = "yes"
     dhcp-accept-server-domain   = "yes"
-    dns-primary                 = "169.254.169.254" // Google DNS required to deliver PAN-OS metrics to Cloud Monitoring
+    dns-primary                 = "169.254.169.254" # Google DNS required to deliver PAN-OS metrics to Cloud Monitoring
     dns-secondary               = "4.2.2.2"
   }
 

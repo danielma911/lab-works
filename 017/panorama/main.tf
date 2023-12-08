@@ -2,19 +2,19 @@
 # Create a Panorama Device Group, Template, & Template Stack.
 # ------------------------------------------------------------------------------------
 
-// device group
+# device group
 resource "panos_device_group" "main" {
   name        = var.panorama_device_group
   description = "Device group for VM-Series on GCP"
 }
 
-// template
+# template
 resource "panos_panorama_template" "main" {
   name        = var.panorama_template
   description = "Template for VM-Series on GCP"
 }
 
-// template stack
+# template stack
 resource "panos_panorama_template_stack" "main" {
   name        = var.panorama_template_stack
   description = "Template stack for VM-Series on GCP"
@@ -27,7 +27,7 @@ resource "panos_panorama_template_stack" "main" {
 # Create eth1/1 & eth1/2 within the Template.
 # ------------------------------------------------------------------------------------
 
-// eth1/1 (untrust)
+# eth1/1 (untrust)
 resource "panos_panorama_ethernet_interface" "eth1" {
   name                      = "ethernet1/1"
   template                  = panos_panorama_template.main.name
@@ -36,7 +36,7 @@ resource "panos_panorama_ethernet_interface" "eth1" {
   create_dhcp_default_route = true
 }
 
-// eth1/2 (trust)
+# eth1/2 (trust)
 resource "panos_panorama_ethernet_interface" "eth2" {
   name                      = "ethernet1/2"
   template                  = panos_panorama_template.main.name
@@ -50,7 +50,7 @@ resource "panos_panorama_ethernet_interface" "eth2" {
 # Create zones within the Template Stack.
 # ------------------------------------------------------------------------------------
 
-// untrust zone (eth1/1)
+# untrust zone (eth1/1)
 resource "panos_zone" "untrust" {
   name     = "untrust"
   template = panos_panorama_template.main.name
@@ -60,7 +60,7 @@ resource "panos_zone" "untrust" {
   ]
 }
 
-// trust zone (eth1/2)
+# trust zone (eth1/2)
 resource "panos_zone" "trust" {
   name     = "trust"
   template = panos_panorama_template.main.name
@@ -75,7 +75,7 @@ resource "panos_zone" "trust" {
 # Create virtual router & static routes inside the template.
 # ------------------------------------------------------------------------------------
 
-// virtual router
+# virtual router
 resource "panos_virtual_router" "main" {
   name     = "gcp-vr"
   template = panos_panorama_template.main.name
@@ -85,7 +85,7 @@ resource "panos_virtual_router" "main" {
   ]
 }
 
-// rfc1918 route
+# rfc1918 route
 resource "panos_panorama_static_route_ipv4" "route1" {
   template       = panos_panorama_template.main.name
   virtual_router = panos_virtual_router.main.name
@@ -94,7 +94,7 @@ resource "panos_panorama_static_route_ipv4" "route1" {
   next_hop       = var.trust_subnet_gateway
 }
 
-// rfc1918 route
+# rfc1918 route
 resource "panos_panorama_static_route_ipv4" "route2" {
   template       = panos_panorama_template.main.name
   virtual_router = panos_virtual_router.main.name
@@ -103,7 +103,7 @@ resource "panos_panorama_static_route_ipv4" "route2" {
   next_hop       = var.trust_subnet_gateway
 }
 
-// rfc1918 route
+# rfc1918 route
 resource "panos_panorama_static_route_ipv4" "route3" {
   template       = panos_panorama_template.main.name
   virtual_router = panos_virtual_router.main.name
@@ -117,7 +117,7 @@ resource "panos_panorama_static_route_ipv4" "route3" {
 # Create Load Balancer Health Check Config: NAT, mgmt profile, & loopback.
 # ------------------------------------------------------------------------------------
 
-// mgmt profile to respond to health checks
+# mgmt profile to respond to health checks
 resource "panos_panorama_management_profile" "main" {
   template = panos_panorama_template.main.name
   name     = "health-checks"
@@ -125,7 +125,7 @@ resource "panos_panorama_management_profile" "main" {
   http     = true
 }
 
-// loopback with mgmt profile assigned
+# loopback with mgmt profile assigned
 resource "panos_panorama_loopback_interface" "example" {
   name               = "loopback.1"
   template           = panos_panorama_template.main.name
@@ -134,7 +134,7 @@ resource "panos_panorama_loopback_interface" "example" {
   management_profile = panos_panorama_management_profile.main.name
 }
 
-// NAT rule to send healthchecks to loopback
+# NAT rule to send healthchecks to loopback
 resource "panos_panorama_nat_rule_group" "main" {
   provider         = panos
   position_keyword = "top"
