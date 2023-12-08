@@ -1,6 +1,6 @@
 
 locals {
-  vmseries_image = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/${var.vmserie_image}"
+  vmseries_image = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/${var.vmseries_image}"
 }
 
 # ------------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ resource "google_compute_region_backend_service" "extlb" {
 # ------------------------------------------------------------------------------------
 
 resource "google_monitoring_dashboard" "dashboard" {
-  dashboard_json = templatefile("${path.root}/bootstrap_files/dashboard.json.tpl", { dashboard_name = "VM-Series Metrics" })
+  dashboard_json = templatefile("${path.root}/modules/dashboard.json.tpl", { dashboard_name = "VM-Series Metrics" })
 
   lifecycle {
     ignore_changes = [
