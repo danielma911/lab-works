@@ -116,6 +116,42 @@ resource "panos_panorama_static_route_ipv4" "route3" {
 }
 
 
+
+# ------------------------------------------------------------------------------------
+# Create NAT policy translate outbound internet traffic through untrust NIC.
+# ------------------------------------------------------------------------------------
+
+resource "panos_panorama_nat_rule_group" "outbound" {
+  provider         = panos
+  position_keyword = "bottom"
+  device_group     = panos_device_group.main.name
+
+  rule {
+    name = "outbound"
+    original_packet {
+      source_zones          = ["trust"]
+      destination_zone      = "untrust"
+      destination_interface = "any"
+      service               = "any"
+      source_addresses      = ["any"]
+      destination_addresses = ["any"]
+    }
+
+    translated_packet {
+      source {
+        dynamic_ip_and_port {
+          interface_address {
+            interface = "ethernet1/1"
+          }
+        }
+      }
+      destination {}
+    }
+  }
+}
+
+
+
 # ------------------------------------------------------------------------------------
 # Create Load Balancer Health Check Config: NAT, mgmt profile, & loopback.
 # ------------------------------------------------------------------------------------
