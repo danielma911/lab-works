@@ -149,21 +149,28 @@ resource "google_compute_region_backend_service" "intlb" {
     group    = module.vmseries.regional_instance_group_id
     failover = false
   }
-
 }
 
+# Create default route to internal LB in the hub network.
+resource "google_compute_route" "intlb" {
+  name         =  "default-to-intlb"
+  dest_range   = "0.0.0.0/0"
+  network      = data.google_compute_subnetwork.trust.network
+  next_hop_ilb = google_compute_forwarding_rule.intlb.id
+  priority     = 10
+}
 
 # ------------------------------------------------------------------------------------
 # Create an external load balancer to distribute traffic to VM-Series trust interfaces.
 # ------------------------------------------------------------------------------------
 
-resource "google_compute_address" "external_nat_ip" {
+resource "google_compute_address" "extlb" {
   name         = "vmseries-extlb-ip"
   region       = var.region
   address_type = "EXTERNAL"
 }
 
-resource "google_compute_forwarding_rule" "rule" {
+resource "google_compute_forwarding_rule" "extlb" {
   name                  = "vmseries-extlb-rule1"
   project               = var.project_id
   region                = var.region
