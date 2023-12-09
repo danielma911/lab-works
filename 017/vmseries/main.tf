@@ -176,7 +176,7 @@ resource "google_compute_forwarding_rule" "extlb" {
   region                = var.region
   load_balancing_scheme = "EXTERNAL"
   all_ports             = true
-  ip_address            = google_compute_address.external_nat_ip.address
+  ip_address            = google_compute_address.extlb.address
   ip_protocol           = "L3_DEFAULT"
   backend_service       = google_compute_region_backend_service.extlb.self_link
 }

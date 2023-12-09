@@ -30,7 +30,7 @@ resource "panos_panorama_service_object" "main" {
   destination_port = "8080"
 }
 
-# jenkins inbound DNAT rule
+# DNAT to translate inbound traffic to jenkins in spoke1
 resource "panos_panorama_nat_rule_group" "main" {
   provider         = panos
   position_keyword = "top"
@@ -43,7 +43,7 @@ resource "panos_panorama_nat_rule_group" "main" {
       source_zones          = ["untrust"]
       destination_zone      = "untrust"
       destination_interface = "ethernet1/1"
-      service               = panos_panorama_address_object.main.name
+      service               = panos_panorama_service_object.main.name
       source_addresses      = ["any"]
       destination_addresses = ["${google_compute_forwarding_rule.main.ip_address}"]
     }
@@ -59,12 +59,32 @@ resource "panos_panorama_nat_rule_group" "main" {
       destination {
         dynamic_translation {
           address = panos_panorama_address_object.main.name
+          port    = 8080
         }
       }
     }
   }
 }
 
+
+# security policy to allow jenkins traffic to spoke1
+resource "panos_security_rule_group" "main" {
+  device_group     = var.panorama_device_group
+  position_keyword = "top"
+
+  rule {
+    name                  = "jenkins"
+    source_zones          = ["untrust"]
+    source_addresses      = ["any"]
+    source_users          = ["any"]
+    destination_zones     = ["trust"]
+    destination_addresses = [panos_panorama_address_object.main.name]
+    applications          = ["jenkins"]
+    services              = ["application-default"]
+    categories            = ["any"]
+    action                = "allow"
+  }
+}
 
 # ------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------
