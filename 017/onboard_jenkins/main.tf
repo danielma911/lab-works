@@ -5,7 +5,7 @@
 
 resource "google_compute_forwarding_rule" "main" {
   name                  = "jenkins"
-  target                = "https://www.googleapis.com/compute/v1/projects/${var.project_id}/regions/${var.region}/targetPools/${var.external_lb_name}"
+  backend_service       = "https://www.googleapis.com/compute/v1/projects/${var.project_id}/regions/${var.region}/backendServices/${var.external_lb_name}"
   region                = var.region
   load_balancing_scheme = "EXTERNAL"
   all_ports             = true
@@ -46,7 +46,7 @@ resource "panos_panorama_nat_rule_group" "main" {
       destination_interface = "ethernet1/1"
       service               = panos_panorama_service_object.main.name
       source_addresses      = ["any"]
-      destination_addresses = ["${google_compute_forwarding_rule.main.ip_address}"]
+      destination_addresses = [google_compute_forwarding_rule.main.ip_address]
     }
 
     translated_packet {
@@ -79,7 +79,7 @@ resource "panos_security_rule_group" "main" {
     source_addresses      = ["any"]
     source_users          = ["any"]
     destination_zones     = ["trust"]
-    destination_addresses = [panos_panorama_address_object.main.name]
+    destination_addresses = [google_compute_forwarding_rule.main.ip_address]
     applications          = ["jenkins"]
     services              = ["application-default"]
     categories            = ["any"]
