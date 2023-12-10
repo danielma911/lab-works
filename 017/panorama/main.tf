@@ -104,6 +104,8 @@ resource "panos_virtual_router" "main" {
   interfaces = [
     panos_panorama_ethernet_interface.eth1.name,
     panos_panorama_ethernet_interface.eth2.name,
+    panos_panorama_loopback_interface.healthcheck.name
+
   ]
 }
 
