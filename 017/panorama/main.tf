@@ -285,7 +285,7 @@ resource "panos_panorama_nat_rule_group" "main" {
     original_packet {
       source_zones          = ["trust"]
       destination_zone      = "trust"
-      destination_interface = "ethernet1/2"
+      destination_interface = "any"
       service               = "any"
       source_addresses      = [panos_panorama_address_group.healthcheck.name]
       destination_addresses = ["any"]
