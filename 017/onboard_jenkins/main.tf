@@ -67,26 +67,5 @@ resource "panos_panorama_nat_rule_group" "main" {
   }
 }
 
-
-# security policy to allow jenkins traffic to spoke1
-resource "panos_security_rule_group" "main" {
-  position_keyword = "top"
-  device_group     = var.panorama_device_group
-
-  rule {
-    name                  = "jenkins"
-    source_zones          = ["untrust"]
-    source_addresses      = ["any"]
-    source_users          = ["any"]
-    destination_zones     = ["trust"]
-    destination_addresses = [google_compute_forwarding_rule.main.ip_address]
-    applications          = ["jenkins"]
-    services              = ["application-default"]
-    categories            = ["any"]
-    action                = "allow"
-    log_setting           = "default"
-  }
-}
-
 # ------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------

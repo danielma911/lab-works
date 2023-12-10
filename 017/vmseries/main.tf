@@ -161,25 +161,8 @@ resource "google_compute_route" "intlb" {
 }
 
 # ------------------------------------------------------------------------------------
-# Create an external load balancer to distribute traffic to VM-Series trust interfaces.
+# Create an external load balancer to distribute traffic to VM-Series untrust NICs.
 # ------------------------------------------------------------------------------------
-
-resource "google_compute_address" "extlb" {
-  name         = "vmseries-extlb-ip"
-  region       = var.region
-  address_type = "EXTERNAL"
-}
-
-resource "google_compute_forwarding_rule" "extlb" {
-  name                  = "vmseries-extlb-rule1"
-  project               = var.project_id
-  region                = var.region
-  load_balancing_scheme = "EXTERNAL"
-  all_ports             = true
-  ip_address            = google_compute_address.extlb.address
-  ip_protocol           = "L3_DEFAULT"
-  backend_service       = google_compute_region_backend_service.extlb.self_link
-}
 
 resource "google_compute_region_backend_service" "extlb" {
   provider              = google-beta

@@ -3,42 +3,48 @@
 # ------------------------------------------------------------------------------------
 
 # create a tag to color code spoke networks blue.
-
 resource "panos_panorama_administrative_tag" "spoke" {
   name         = "spoke-vpc"
   color        = "color25"
   device_group = var.panorama_device_group
-  depends_on = [
-    panos_zone.untrust
-  ]
 }
 
-# create an address object for spoke1
+# create an address object for spoke1-vpc
 resource "panos_panorama_address_object" "spoke1" {
   name         = "spoke1-vpc"
   value        = "10.1.0.0/24"
   device_group = var.panorama_device_group
-  tags = [
-    panos_administrative_tag.spoke.name
-  ]
 }
 
-# create an address object for spoke2
+# create an address object for spoke2-vpc
 resource "panos_panorama_address_object" "spoke2" {
   name         = "spoke2-vpc"
   value        = "10.2.0.0/24"
   device_group = var.panorama_device_group
   tags = [
-    panos_administrative_tag.spoke.name
+    panos_panorama_administrative_tag.spoke.name
   ]
 }
 
 
-# create an outbound & east-west security policy
-resource "panos_security_rule_group" "egress" {
+# create an inbound, outbound, & east-west security policy
+resource "panos_security_rule_group" "main" {
   device_group     = var.panorama_device_group
   position_keyword = "bottom"
 
+  rule {
+    name                  = "jenkins"
+    source_zones          = ["untrust"]
+    source_addresses      = ["any"]
+    source_users          = ["any"]
+    destination_zones     = ["trust"]
+    destination_addresses = [google_compute_forwarding_rule.main.ip_address]
+    applications          = ["jenkins","web-browsing"]
+    services              = ["any"]
+    categories            = ["any"]
+    action                = "allow"
+    log_setting           = "default"
+  }
   rule {
     name                  = "outbound"
     source_zones          = ["trust"]
@@ -60,11 +66,12 @@ resource "panos_security_rule_group" "egress" {
     destination_zones     = ["trust"]
     destination_addresses = [panos_panorama_address_object.spoke1.name, panos_panorama_address_object.spoke2.name]
     applications          = ["any"]
-    services              = ["application-default"]
+    services              = ["any"]
     categories            = ["any"]
     action                = "allow"
     log_setting           = "default"
   }
 }
 
-
+# ------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------

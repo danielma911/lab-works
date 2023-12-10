@@ -258,6 +258,28 @@ resource "panos_address_object" "healthcheck2" {
   ]
 }
 
+# address group for LB health-check range 3
+resource "panos_address_object" "healthcheck3" {
+  name         = "health-check-3"
+  value        = "209.85.152.0/22"
+  device_group = var.panorama_device_group
+
+  tags = [
+    panos_panorama_administrative_tag.healthcheck.name
+  ]
+}
+
+# address group for LB health-check range 4
+resource "panos_address_object" "healthcheck4" {
+  name         = "health-check-4"
+  value        = "209.85.204.0/22"
+  device_group = var.panorama_device_group
+
+  tags = [
+    panos_panorama_administrative_tag.healthcheck.name
+  ]
+}
+
 # create address group for both health-check ranges
 resource "panos_panorama_address_group" "healthcheck" {
   name         = "health-checks"
@@ -267,6 +289,8 @@ resource "panos_panorama_address_group" "healthcheck" {
   static_addresses = [
     panos_address_object.healthcheck1.name,
     panos_address_object.healthcheck2.name,
+    panos_address_object.healthcheck3.name,
+    panos_address_object.healthcheck4.name
   ]
 
   tags = [
