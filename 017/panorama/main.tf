@@ -275,7 +275,7 @@ resource "panos_panorama_address_group" "healthcheck" {
 }
 
 
-# NAT rule to send healthchecks to loopback
+# NAT rule to send load balancer health checks to loopback
 resource "panos_panorama_nat_rule_group" "main" {
   rulebase         = "post-rulebase"
   position_keyword = "bottom"
@@ -283,12 +283,33 @@ resource "panos_panorama_nat_rule_group" "main" {
 
 
   rule {
-    name = "health-checks"
+    name = "health-check-extlb"
+    original_packet {
+      source_zones          = ["untrust"]
+      destination_zone      = "untrust"
+      destination_interface = "any"
+      service               = "service-http"
+      source_addresses      = [panos_panorama_address_group.healthcheck.name]
+      destination_addresses = ["any"]
+    }
+
+    translated_packet {
+      source {}
+      destination {
+        dynamic_translation {
+          address = var.loopback_ip
+        }
+      }
+    }
+  }
+
+  rule {
+    name = "health-check-intlb"
     original_packet {
       source_zones          = ["trust"]
       destination_zone      = "trust"
       destination_interface = "any"
-      service               = "any"
+      service               = "service-http"
       source_addresses      = [panos_panorama_address_group.healthcheck.name]
       destination_addresses = ["any"]
     }
