@@ -25,7 +25,7 @@ variable "panorama_template_stack" {
 
 variable "panorama_vm_auth_key" {
   description = "Enter the Panorama VM Auth Key."
-  default = "629330422345557"
+  default     = "629330422345557"
 }
 
 variable "subnet_name_mgmt" {
@@ -42,7 +42,7 @@ variable "subnet_name_trust" {
 
 variable "vmseries_image" {
   description = "The name of the VM-Series image to use from the paloaltonetworksgcp-public project"
-  default = "vmseries-flex-bundle2-1023"
+  default     = "vmseries-flex-bundle2-1023"
 }
 
 variable "vmseries_metrics" {

@@ -46,7 +46,7 @@ resource "panos_security_rule_group" "egress" {
     source_users          = ["any"]
     destination_zones     = ["untrust"]
     destination_addresses = ["any"]
-    applications          = ["apt-get","dns","google-base","ntp","ssl","web-browsing"]
+    applications          = ["apt-get", "dns", "google-base", "ntp", "ssl", "web-browsing"]
     services              = ["application-default"]
     categories            = ["any"]
     action                = "allow"

@@ -51,12 +51,11 @@ resource "google_service_account" "vmseries" {
 }
 
 module "vmseries" {
-  source       = "./modules/autoscale/"
-  name         = "vmseries"
-  regional_mig = true
-  region       = var.region
-  #min_cpu_platform      = "Intel Broadwell"
-  machine_type          = "e2-standard-4"
+  source                = "./modules/autoscale/"
+  name                  = "vmseries"
+  regional_mig          = true
+  region                = var.region
+  machine_type          = "n2-standard-4"
   min_vmseries_replicas = 1 # min firewalls per zone.
   max_vmseries_replicas = 1 # max firewalls per zone.
   image                 = local.vmseries_image
@@ -111,8 +110,8 @@ resource "google_compute_region_health_check" "vmseries" {
   region              = var.region
   check_interval_sec  = 3
   healthy_threshold   = 1
-  timeout_sec         = 1
-  unhealthy_threshold = 1
+  timeout_sec         = 2
+  unhealthy_threshold = 5
 
   http_health_check {
     port         = 80
@@ -153,7 +152,7 @@ resource "google_compute_region_backend_service" "intlb" {
 
 # Create default route to internal LB in the hub network.
 resource "google_compute_route" "intlb" {
-  name         =  "default-to-intlb"
+  name         = "default-to-intlb"
   dest_range   = "0.0.0.0/0"
   network      = data.google_compute_subnetwork.trust.network
   next_hop_ilb = google_compute_forwarding_rule.intlb.id
