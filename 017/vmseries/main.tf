@@ -131,6 +131,7 @@ resource "google_compute_forwarding_rule" "intlb" {
   ip_protocol           = "TCP"
   all_ports             = true
   subnetwork            = data.google_compute_subnetwork.trust.id
+  ip_address            = cidrhost(data.google_compute_subnetwork.trust.ip_cidr_range, 10)
   allow_global_access   = true
   backend_service       = google_compute_region_backend_service.intlb.self_link
 }
