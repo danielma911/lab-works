@@ -6,8 +6,8 @@
 
 resource "panos_panorama_administrative_tag" "spoke" {
   name         = "spoke-vpc"
-  device_group = var.panorama_device_group
   color        = "color25"
+  device_group = var.panorama_device_group
   depends_on = [
     panos_zone.untrust
   ]
@@ -38,6 +38,7 @@ resource "panos_panorama_address_object" "spoke2" {
 resource "panos_security_rule_group" "egress" {
   device_group     = var.panorama_device_group
   position_keyword = "bottom"
+
   rule {
     name                  = "outbound"
     source_zones          = ["trust"]
@@ -45,10 +46,11 @@ resource "panos_security_rule_group" "egress" {
     source_users          = ["any"]
     destination_zones     = ["untrust"]
     destination_addresses = ["any"]
-    applications          = ["any"]
+    applications          = ["apt-get","dns","google-base","ntp","ssl","web-browsing"]
     services              = ["application-default"]
     categories            = ["any"]
     action                = "allow"
+    log_setting           = "default"
   }
   rule {
     name                  = "east-west"
@@ -61,6 +63,7 @@ resource "panos_security_rule_group" "egress" {
     services              = ["application-default"]
     categories            = ["any"]
     action                = "allow"
+    log_setting           = "default"
   }
 }
 

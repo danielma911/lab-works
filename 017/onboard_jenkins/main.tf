@@ -28,6 +28,7 @@ resource "panos_panorama_service_object" "main" {
   name             = "jenkins-8080"
   protocol         = "tcp"
   destination_port = "8080"
+  device_group     = var.panorama_device_group
 }
 
 # DNAT to translate inbound traffic to jenkins in spoke1
@@ -69,8 +70,8 @@ resource "panos_panorama_nat_rule_group" "main" {
 
 # security policy to allow jenkins traffic to spoke1
 resource "panos_security_rule_group" "main" {
-  device_group     = var.panorama_device_group
   position_keyword = "top"
+  device_group     = var.panorama_device_group
 
   rule {
     name                  = "jenkins"
@@ -83,6 +84,7 @@ resource "panos_security_rule_group" "main" {
     services              = ["application-default"]
     categories            = ["any"]
     action                = "allow"
+    log_setting           = "default"
   }
 }
 
