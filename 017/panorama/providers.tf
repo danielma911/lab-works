@@ -13,7 +13,7 @@ terraform {
 
 provider "panos" {
   hostname = var.panorama_address
-  username = "admin"
+  username = "paloalto"
   password = "Pal0Alt0@123"
   timeout  = 10
 }
