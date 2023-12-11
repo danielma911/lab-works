@@ -151,14 +151,6 @@ resource "google_compute_region_backend_service" "intlb" {
   }
 }
 
-# Create default route to internal LB in the hub network.
-resource "google_compute_route" "intlb" {
-  name         = "default-to-intlb"
-  dest_range   = "0.0.0.0/0"
-  network      = data.google_compute_subnetwork.trust.network
-  next_hop_ilb = google_compute_forwarding_rule.intlb.id
-  priority     = 10
-}
 
 # ------------------------------------------------------------------------------------
 # Create an external load balancer to distribute traffic to VM-Series untrust NICs.

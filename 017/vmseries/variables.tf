@@ -42,7 +42,7 @@ variable "subnet_name_trust" {
 
 variable "vmseries_image" {
   description = "The name of the VM-Series image to use from the paloaltonetworksgcp-public project"
-  default     = "vmseries-flex-bundle2-1023"
+  default     = "vmseries-flex-bundle2-1026"
 }
 
 variable "vmseries_metrics" {
