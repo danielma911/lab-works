@@ -146,9 +146,10 @@ resource "panos_panorama_static_route_ipv4" "route3" {
 
 resource "panos_panorama_nat_rule_group" "outbound" {
   provider         = panos
+  rulebase         = "post-rulebase"
   position_keyword = "bottom"
   device_group     = panos_device_group.main.name
-
+  
   rule {
     name = "outbound"
     original_packet {
@@ -302,7 +303,7 @@ resource "panos_panorama_address_group" "healthcheck" {
 # NAT rule to send load balancer health checks to loopback
 resource "panos_panorama_nat_rule_group" "main" {
   rulebase         = "post-rulebase"
-  position_keyword = "bottom"
+  position_keyword = "top"
   device_group     = panos_device_group.main.name
 
 
