@@ -17,8 +17,3 @@ provider "panos" {
   password = "Pal0Alt0@123"
   timeout  = 10
 }
-
-provider "google" {
-  project = var.project_id
-  region  = var.region
-}

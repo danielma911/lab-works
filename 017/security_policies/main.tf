@@ -38,7 +38,7 @@ resource "panos_security_rule_group" "main" {
     source_addresses      = ["any"]
     source_users          = ["any"]
     destination_zones     = ["trust"]
-    destination_addresses = [google_compute_forwarding_rule.main.ip_address]
+    destination_addresses = ["any"]
     applications          = ["jenkins","web-browsing"]
     services              = ["any"]
     categories            = ["any"]
