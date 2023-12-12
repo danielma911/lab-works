@@ -45,6 +45,11 @@ variable "vmseries_image" {
   default     = "vmseries-flex-bundle2-1026"
 }
 
+variable "external_lb_name" {
+  description = "Name of the existing external LB frontending the VM-Series firewalls."
+  default     = "vmseries-extlb"
+}
+
 variable "vmseries_metrics" {
   default = {
     "custom.googleapis.com/VMSeries/panSessionActive" = {
