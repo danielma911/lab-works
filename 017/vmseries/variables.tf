@@ -11,6 +11,7 @@ variable "region" {
   type        = string
   description = "The Google Cloud region"
 }
+
 variable "panorama_address" {
   description = "The Panorama IPv4 address that is reachable from the management network."
 }
