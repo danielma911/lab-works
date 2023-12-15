@@ -46,8 +46,15 @@ data "google_compute_subnetwork" "trust" {
 # ------------------------------------------------------------------------------------
 
 resource "google_service_account" "vmseries" {
-  account_id = "vmseries-mig-sa"
-  project    = var.project_id
+  account_id   = "vmseries-mig-sa"
+  project      = var.project_id
+}
+
+resource "google_project_iam_member" "this" {
+  for_each = var.roles
+  project  = var.project_id
+  role     = each.value
+  member   = "serviceAccount:${google_service_account.vmseries.email}"
 }
 
 module "vmseries" {
