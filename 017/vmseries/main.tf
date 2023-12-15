@@ -62,7 +62,7 @@ module "vmseries" {
   name                  = "vmseries"
   regional_mig          = true
   region                = var.region
-  machine_type          = "n2-standard-4"
+  machine_type          = "e2-standard-4"
   min_vmseries_replicas = 1 # min firewalls per zone.
   max_vmseries_replicas = 1 # max firewalls per zone.
   image                 = local.vmseries_image
