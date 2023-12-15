@@ -14,6 +14,9 @@ resource "panos_panorama_address_object" "spoke1" {
   name         = "spoke1-vpc"
   value        = "10.1.0.0/24"
   device_group = var.panorama_device_group
+  tags = [
+    panos_panorama_administrative_tag.spoke.name
+  ]
 }
 
 # create an address object for spoke2-vpc

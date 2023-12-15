@@ -38,7 +38,7 @@ resource "panos_panorama_nat_rule_group" "main" {
   device_group     = var.panorama_device_group
 
   rule {
-    name = "jenkins-nat"
+    name = "fwd-rule1"
 
     original_packet {
       source_zones          = ["untrust"]
