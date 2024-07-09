@@ -26,7 +26,6 @@ variable "panorama_template_stack" {
 
 variable "panorama_vm_auth_key" {
   description = "Enter the Panorama VM Auth Key."
-  default     = "629330422345557"
 }
 
 variable "subnet_name_mgmt" {
