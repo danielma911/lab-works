@@ -39,81 +39,6 @@ provider "google" {
   zone    = local.zone
 }
 
-data "google_compute_zones" "main" {}
-
-
-# -------------------------------------------------------------------------------------
-# Enable required APIs
-# -------------------------------------------------------------------------------------
-
-resource "google_project_service" "apikeys" {
-  project            = local.project_id
-  service            = "apikeys.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "notebooks" {
-  project            = local.project_id
-  service            = "notebooks.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "artifactregistry" {
-  project            = local.project_id
-  service            = "artifactregistry.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "storage-component" {
-  project            = local.project_id
-  service            = "storage-component.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "dataplex" {
-  project            = local.project_id
-  service            = "dataplex.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "datacatalog" {
-  project            = local.project_id
-  service            = "datacatalog.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "visionai" {
-  project            = local.project_id
-  service            = "visionai.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "aiplatform" {
-  project            = local.project_id
-  service            = "aiplatform.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "logging" {
-  service            = "logging.googleapis.com"
-  project            = local.project_id
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "cloudasset" {
-  service            = "cloudasset.googleapis.com"
-  project            = local.project_id
-  disable_on_destroy = false
-}
-
-# Enable billing for the project
-resource "google_project_service" "cloudbilling" {
-  service            = "cloudbilling.googleapis.com"
-  project            = local.project_id
-  disable_on_destroy = false
-}
-
-
 # -------------------------------------------------------------------------------------
 # Create GSC bucket & log router for VPC flow logs
 # -------------------------------------------------------------------------------------
@@ -150,7 +75,6 @@ resource "google_project_iam_binding" "gcs-bucket-writer" {
     google_logging_project_sink.log_router.writer_identity
   ]
 }
-
 
 resource "google_project_iam_audit_config" "all_services" {
   project = local.project_id
@@ -282,8 +206,6 @@ resource "google_project_iam_member" "ai" {
   role    = "roles/owner" #"roles/aiplatform.user" #"roles/aiplatform.admin"
   member  = "serviceAccount:${google_service_account.ai.email}"
 }
-
-
 
 resource "google_compute_instance" "ai" {
   name         = "ai-vm"
