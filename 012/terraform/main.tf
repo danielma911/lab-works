@@ -63,7 +63,7 @@ resource "google_logging_project_sink" "log_router" {
   unique_writer_identity = true
 
   depends_on = [
-    google_storage_bucket.gcs,
+    google_storage_bucket.gcs
   ]
 }
 
