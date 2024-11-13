@@ -156,9 +156,9 @@ resource "google_compute_region_backend_service" "intlb" {
   backend {
     group    = module.vmseries.regional_instance_group_id
     failover = false
+    balancing_mode = "CONNECTION"
   }
 }
-
 
 # ------------------------------------------------------------------------------------
 # Create an external load balancer to distribute traffic to VM-Series untrust NICs.
@@ -176,6 +176,7 @@ resource "google_compute_region_backend_service" "extlb" {
   backend {
     group    = module.vmseries.regional_instance_group_id
     failover = false
+    balancing_mode = "CONNECTION"
   }
 }
 
